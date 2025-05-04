@@ -1,0 +1,203 @@
+/* Main Dashboard Styles */
+:root {
+    --primary-color: #4e73df;
+    --secondary-color: #858796;
+    --success-color: #1cc88a;
+    --info-color: #36b9cc;
+    --warning-color: #f6c23e;
+    --danger-color: #e74a3b;
+    --light-color: #f8f9fc;
+    --dark-color: #5a5c69;
+}
+
+body {
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f8f9fc;
+    overflow-x: hidden;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    background: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+    min-height: 100vh;
+    position: fixed;
+    z-index: 100;
+    width: 16.666667%;
+    transition: all 0.2s ease;
+}
+
+.sidebar-header {
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.sidebar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0.75rem 1rem;
+    border-radius: 0.35rem;
+    margin: 0.2rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.sidebar-nav .nav-link:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-nav .nav-link.active {
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+}
+
+.sidebar-nav .nav-header {
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 700;
+}
+
+/* Content area */
+.content-wrapper {
+    min-height: calc(100vh - 70px);
+    background-color: #f8f9fc;
+}
+
+/* Cards */
+.card {
+    border: none;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    border-radius: 0.35rem;
+}
+
+.card-header {
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+/* Bank cards styling */
+.bank-card, .city-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+}
+
+.bank-card:hover, .city-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1.5rem 0 rgba(58, 59, 69, 0.2);
+}
+
+.bank-logo-container {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bank-logo {
+    max-height: 100px;
+    max-width: 100%;
+}
+
+.bank-logo-placeholder {
+    width: 100px;
+    height: 100px;
+    background-color: #e9ecef;
+    border-radius: 50%;
+    color: #6c757d;
+}
+
+.bank-detail-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e9ecef;
+}
+
+.bank-form-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.city-icon {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Job Status Colors */
+.job-row.table-success {
+    background-color: rgba(28, 200, 138, 0.1);
+}
+
+.job-row.table-warning {
+    background-color: rgba(246, 194, 62, 0.1);
+}
+
+.job-row.table-danger {
+    background-color: rgba(231, 74, 59, 0.1);
+}
+
+/* Empty state styling */
+.empty-state {
+    color: #6c757d;
+    padding: 1.5rem;
+}
+
+/* Stats Cards */
+.border-left-primary {
+    border-left: 0.25rem solid var(--primary-color) !important;
+}
+
+.border-left-success {
+    border-left: 0.25rem solid var(--success-color) !important;
+}
+
+.border-left-info {
+    border-left: 0.25rem solid var(--info-color) !important;
+}
+
+.border-left-warning {
+    border-left: 0.25rem solid var(--warning-color) !important;
+}
+
+.border-left-danger {
+    border-left: 0.25rem solid var(--danger-color) !important;
+}
+
+/* Log container */
+.log-container {
+    height: 400px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 25%;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        min-height: auto;
+    }
+    
+    .sidebar-nav {
+        display: none;
+    }
+    
+    .bank-logo-container {
+        height: 90px;
+    }
+    
+    .bank-logo {
+        max-height: 70px;
+    }
+}

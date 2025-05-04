@@ -1,0 +1,60 @@
+{% extends 'dashboard/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Schedule Job - {{ bank.name }} - Deal Hunter{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Title -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Schedule Job - {{ bank.name }}</h1>
+        <div class="btn-toolbar">
+            <a href="{% url 'bank_detail' bank.id %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Bank
+            </a>
+        </div>
+    </div>
+    
+    <!-- Scheduling Form -->
+    <div class="row">
+        <div class="col-md-8 col-lg-6 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Schedule Scraping Job</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <div class="text-center mb-4">
+                                {% if bank.logo %}
+                                <img src="{{ bank.logo.url }}" alt="{{ bank.name }}" class="bank-form-logo mb-3">
+                                {% else %}
+                                <div class="bank-logo-placeholder bank-form-logo mb-3 mx-auto d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-university fa-3x"></i>
+                                </div>
+                                {% endif %}
+                                <h5>{{ bank.name }}</h5>
+                                <p class="text-muted">Schedule a time to automatically run the scraper</p>
+                            </div>
+                            
+                            {{ form|crispy }}
+                            
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                The scraper will run automatically at the scheduled time. You can view all scheduled jobs in the admin panel.
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-calendar-check me-2"></i>Schedule Job
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

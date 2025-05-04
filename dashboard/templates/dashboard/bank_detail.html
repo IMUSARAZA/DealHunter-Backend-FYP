@@ -1,0 +1,202 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}{{ bank.name }} - Deal Hunter{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Title with Bank Info -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center">
+            {% if bank.logo %}
+            <img src="{{ bank.logo.url }}" alt="{{ bank.name }}" class="bank-detail-logo me-3">
+            {% else %}
+            <div class="bank-logo-placeholder bank-detail-logo me-3 d-flex align-items-center justify-content-center">
+                <i class="fas fa-university fa-2x"></i>
+            </div>
+            {% endif %}
+            <h1 class="h3 mb-0">{{ bank.name }}</h1>
+        </div>
+        <div class="btn-toolbar">
+            <a href="{% url 'edit_bank' bank.id %}" class="btn btn-warning me-2">
+                <i class="fas fa-edit me-2"></i>Edit Bank
+            </a>
+            <a href="{% url 'start_scraping' bank.id %}" class="btn btn-success me-2">
+                <i class="fas fa-play me-2"></i>Start Scraping
+            </a>
+            <a href="{% url 'schedule_job' bank.id %}" class="btn btn-primary me-2">
+                <i class="fas fa-calendar me-2"></i>Schedule Job
+            </a>
+            <a href="{% url 'delete_bank' bank.id %}" class="btn btn-danger">
+                <i class="fas fa-trash-alt me-2"></i>Delete
+            </a>
+        </div>
+    </div>
+    
+    <!-- Bank Info Card -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Bank Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table">
+                                <tr>
+                                    <th>Name:</th>
+                                    <td>{{ bank.name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Website:</th>
+                                    <td>
+                                        {% if bank.website_url %}
+                                        <a href="{{ bank.website_url }}" target="_blank">{{ bank.website_url }}</a>
+                                        {% else %}
+                                        <span class="text-muted">Not provided</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Scraper Class:</th>
+                                    <td>{{ bank.scraper_class }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total Cities:</th>
+                                    <td>{{ cities.count }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            {% if bank.logo %}
+                            <img src="{{ bank.logo.url }}" alt="{{ bank.name }}" class="img-fluid" style="max-height: 150px;">
+                            {% else %}
+                            <div class="bank-logo-placeholder mx-auto d-flex align-items-center justify-content-center" style="width: 150px; height: 150px;">
+                                <i class="fas fa-university fa-4x"></i>
+                            </div>
+                            <p class="text-muted mt-2">No logo available</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- City Cards -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Cities</h6>
+                    <a href="{% url 'admin:dashboard_city_add' %}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-plus me-1"></i> Add City
+                    </a>
+                </div>
+                <div class="card-body py-4">
+                    <div class="row">
+                        {% for city in cities %}
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4">
+                            <div class="card city-card h-100">
+                                <div class="card-body text-center">
+                                    <div class="city-icon mb-3">
+                                        <i class="fas fa-city fa-3x text-primary"></i>
+                                    </div>
+                                    <h5 class="card-title">{{ city.name }}</h5>
+                                </div>
+                                <div class="card-footer bg-transparent d-flex justify-content-around">
+                                    <a href="{% url 'start_scraping_city' bank.id city.id %}" class="btn btn-sm btn-outline-success">
+                                        <i class="fas fa-play me-1"></i> Scrape Now
+                                    </a>
+                                    <a href="{% url 'schedule_job_city' bank.id city.id %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-calendar me-1"></i> Schedule
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12 text-center p-5">
+                            <div class="empty-state">
+                                <i class="fas fa-city fa-3x mb-3 text-muted"></i>
+                                <h5>No Cities Added Yet</h5>
+                                <p class="text-muted">Add cities for this bank through the admin panel.</p>
+                                <a href="{% url 'admin:dashboard_city_add' %}" class="btn btn-primary mt-2">
+                                    <i class="fas fa-plus me-2"></i>Add City
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Jobs for this Bank -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Jobs</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>City</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Started</th>
+                                    <th>Completed</th>
+                                    <th>Deals Scraped</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for job in recent_jobs %}
+                                <tr class="job-row {% if job.status == 'failed' %}table-danger{% elif job.status == 'running' %}table-warning{% elif job.status == 'completed' %}table-success{% elif job.status == 'stopped' %}table-secondary{% endif %}">
+                                    <td>{{ job.city.name }}</td>
+                                    <td>
+                                        {% if job.status == 'pending' %}
+                                        <span class="badge bg-secondary">Pending</span>
+                                        {% elif job.status == 'running' %}
+                                        <span class="badge bg-warning">Running</span>
+                                        {% elif job.status == 'completed' %}
+                                        <span class="badge bg-success">Completed</span>
+                                        {% elif job.status == 'failed' %}
+                                        <span class="badge bg-danger">Failed</span>
+                                        {% elif job.status == 'stopped' %}
+                                        <span class="badge bg-secondary">Stopped</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ job.created_at|date:"Y-m-d H:i" }}</td>
+                                    <td>{{ job.started_at|date:"Y-m-d H:i"|default_if_none:"Not Started" }}</td>
+                                    <td>{{ job.completed_at|date:"Y-m-d H:i"|default_if_none:"Not Completed" }}</td>
+                                    <td>{{ job.deals_scraped }}</td>
+                                    <td>
+                                        <a href="{% url 'job_detail' job.id %}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-search"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center py-4">
+                                        <div class="empty-state">
+                                            <i class="fas fa-tasks fa-2x mb-3 text-muted"></i>
+                                            <h6>No Jobs Run Yet</h6>
+                                            <p class="text-muted small">When you run scraper jobs for this bank, they'll appear here.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

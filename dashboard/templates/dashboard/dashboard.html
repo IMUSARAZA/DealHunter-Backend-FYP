@@ -1,0 +1,225 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Dashboard - Deal Hunter{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Title -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Dashboard</h1>
+        <div class="btn-toolbar">
+            <a href="{% url 'admin:dashboard_bank_add' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Add Bank
+            </a>
+        </div>
+    </div>
+    
+    <!-- Messages Section -->
+    {% if messages %}
+    <div class="row mb-4">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Stats Row -->
+    <div class="row mb-4">
+        <!-- Total Banks -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Banks</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ banks.count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-university fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Deals Scraped -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Total Deals Scraped</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_deals_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-tag fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Jobs -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Pending Jobs</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pending_jobs }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Jobs -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Completed Jobs</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ completed_jobs }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banks Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Banks</h6>
+                </div>
+                <div class="card-body py-4">
+                    <div class="row">
+                        {% for bank in banks %}
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4">
+                            <div class="card bank-card h-100">
+                                <div class="bank-logo-container text-center p-4">
+                                    {% if bank.logo %}
+                                    <img src="{{ bank.logo.url }}" alt="{{ bank.name }}" class="bank-logo img-fluid">
+                                    {% else %}
+                                    <div class="bank-logo-placeholder d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-university fa-3x"></i>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">{{ bank.name }}</h5>
+                                    <p class="card-text text-muted">{{ bank.cities.count }} Cities</p>
+                                </div>
+                                <div class="card-footer bg-transparent d-flex justify-content-around">
+                                    <a href="{% url 'bank_detail' bank.id %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye me-1"></i> View
+                                    </a>
+                                    <a href="{% url 'edit_bank' bank.id %}" class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit me-1"></i> Edit
+                                    </a>
+                                    <a href="{% url 'start_scraping' bank.id %}" class="btn btn-sm btn-outline-success">
+                                        <i class="fas fa-play me-1"></i> Scrape
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12 text-center p-5">
+                            <div class="empty-state">
+                                <i class="fas fa-database fa-3x mb-3 text-muted"></i>
+                                <h5>No Banks Added Yet</h5>
+                                <p class="text-muted">Start by adding your first bank through the admin panel.</p>
+                                <a href="{% url 'admin:dashboard_bank_add' %}" class="btn btn-primary mt-2">
+                                    <i class="fas fa-plus me-2"></i>Add Bank
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Jobs Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Jobs</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Bank</th>
+                                    <th>City</th>
+                                    <th>Status</th>
+                                    <th>Started</th>
+                                    <th>Deals Scraped</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for job in recent_jobs %}
+                                <tr class="job-row {% if job.status == 'failed' %}table-danger{% elif job.status == 'running' %}table-warning{% elif job.status == 'completed' %}table-success{% endif %}">
+                                    <td>{{ job.bank.name }}</td>
+                                    <td>{{ job.city.name }}</td>
+                                    <td>
+                                        {% if job.status == 'pending' %}
+                                        <span class="badge bg-secondary">Pending</span>
+                                        {% elif job.status == 'running' %}
+                                        <span class="badge bg-warning">Running</span>
+                                        {% elif job.status == 'completed' %}
+                                        <span class="badge bg-success">Completed</span>
+                                        {% elif job.status == 'failed' %}
+                                        <span class="badge bg-danger">Failed</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ job.started_at|default_if_none:"Not Started" }}</td>
+                                    <td>{{ job.deals_scraped }}</td>
+                                    <td>
+                                        <a href="{% url 'job_detail' job.id %}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-search"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center py-4">
+                                        <div class="empty-state">
+                                            <i class="fas fa-tasks fa-2x mb-3 text-muted"></i>
+                                            <h6>No Jobs Run Yet</h6>
+                                            <p class="text-muted small">When you run scraper jobs, they'll appear here.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
