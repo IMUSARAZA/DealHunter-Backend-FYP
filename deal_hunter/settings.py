@@ -13,6 +13,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'dealhunter-backend-fyp-production.up.railway.app',
     'admin.thedealhunterapp.com',
+    '127.0.0.1',
 ]
 
 # Application definition
