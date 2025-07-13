@@ -128,6 +128,10 @@ LOGOUT_REDIRECT_URL = '/login/'
 # Firebase Admin SDK credentials path
 FIREBASE_CREDENTIALS_PATH = os.path.join(BASE_DIR, 'firebase-credentials.json')
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://dealhunter-backend-fyp-production.up.railway.app",
+    "https://admin.thedealhunterapp.com",
+]
 
 # Celery Configuration
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
