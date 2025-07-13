@@ -10,7 +10,10 @@ SECRET_KEY = 'django-insecure-replace-with-your-own-secret-key'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'dealhunter-backend-fyp-production.up.railway.app',
+    'admin.thedealhunterapp.com',
+]
 
 # Application definition
 INSTALLED_APPS = [
