@@ -1,4 +1,3 @@
-import tensorflow as tf
 import firebase_admin
 from firebase_admin import credentials, firestore
 import time
@@ -25,7 +24,6 @@ from django.conf import settings
 import logging
 from dashboard.models import ScrapingJob
 
-logger = logging.getLogger(__name__)
 
 class MCBScraper(BaseScraper):
     """MCB Bank scraper class"""
@@ -47,7 +45,6 @@ class MCBScraper(BaseScraper):
             'locations': set()
         }
         
-        tf.get_logger().setLevel('ERROR')
     
     def get_base_url(self):
         """Get the base URL for the bank and city"""
